@@ -222,7 +222,7 @@ HttpConnection::HttpCode HttpConnection::parse_request_line(char *text)
     *ver++ = '\0';
     ver += strspn(ver, " \t");
 
-    if (strcasecmp(ver, "HTTP/1.1") != 0)
+    if (strcasecmp(ver, "HTTP/1.1") != 0 && strcasecmp(ver, "HTTP/1.0") != 0)
         return HttpCode::BadRequest;
 
     std::string_view url_view(url);

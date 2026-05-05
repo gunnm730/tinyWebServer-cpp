@@ -10,7 +10,7 @@
 //   WebServer.add_timer()  → new TimerNode, set expire = now + 3*TIMESLOT
 //   WebServer.adjust_timer() → 延长 expire, 重排位置
 //   WebServer.eventLoop() 收到 SIGALRM → EpollUtils.timer_handler()
-//     → TimerList.tick() → 调用 cb_func (关闭连接)
+//     → TimerList.tick() → 调用回调 (关闭连接)
 //     → alarm(TIMESLOT) 重新设闹钟
 //
 // 连接超时: 3 个 TIMESLOT 内无数据则断开
@@ -333,14 +333,5 @@ private:
 
 inline int *EpollUtils::u_pipefd = nullptr;
 inline int EpollUtils::u_epollfd = 0;
-
-// 默认超时回调: 关闭连接
-// 从 epoll 移除 fd, close, m_user_count-- 由调用方处理
-inline void cb_func(ClientData *user_data)
-{
-    epoll_ctl(EpollUtils::u_epollfd, EPOLL_CTL_DEL, user_data->sockfd, nullptr);
-    assert(user_data);
-    close(user_data->sockfd);
-}
 
 #endif

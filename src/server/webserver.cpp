@@ -385,7 +385,9 @@ void WebServer::add_timer(int connfd, const sockaddr_in &addr)
 
     auto *timer = new TimerNode;
     timer->user_data = &users_timer_[connfd];
-    timer->cb_func = cb_func;
+    timer->cb_func = [this](ClientData *data) {
+        users_[data->sockfd].close_conn(true);
+    };
     timer->expire = std::chrono::steady_clock::now() + std::chrono::seconds(3 * TIMESLOT);
 
     users_timer_[connfd].timer = timer;

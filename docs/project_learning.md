@@ -1,6 +1,42 @@
 # TinyWebServer 项目学习文档
 
-> 基于 C++17 的轻量级 Linux Web 服务器，使用 epoll + 线程池 + MySQL 连接池实现高并发 HTTP 服务。
+> **TinyWebServer** — 基于 C++17 的 Linux 高并发 Web 服务器，采用 epoll 多路复用 + 线程池 + MySQL 连接池架构。支持 HTTP/1.1 GET/POST 请求解析、静态文件零拷贝服务（mmap + writev）、用户注册/登录 CGI 处理、异步日志、Proactor/Reactor 双并发模型、定时器管理空闲连接。总代码量约 2000 行，header-only 模块设计，是深入学习 Linux 系统编程和 C++ 服务端开发的完整实践项目。
+
+---
+
+## 快速启动
+
+```bash
+# 1. 安装依赖
+sudo apt install g++ libmysqlcppconn-dev mysql-server
+
+# 2. 配置数据库
+sudo mysql -e "
+    CREATE DATABASE IF NOT EXISTS qgydb;
+    CREATE USER IF NOT EXISTS 'webuser'@'localhost' IDENTIFIED BY 'webpass';
+    GRANT ALL PRIVILEGES ON qgydb.* TO 'webuser'@'localhost';
+    FLUSH PRIVILEGES;
+    USE qgydb;
+    CREATE TABLE IF NOT EXISTS user(
+        username CHAR(50) NULL,
+        passwd CHAR(50) NULL
+    ) ENGINE=InnoDB;
+"
+
+# 3. 编译
+make
+
+# 4. 准备静态文件
+mkdir -p root
+# （将 judge.html, register.html, log.html, welcome.html 等放入 root/）
+
+# 5. 运行
+./server
+
+# 浏览器访问 http://localhost:9006/
+```
+
+如需自定义数据库地址或端口，修改 `src/main.cpp`（凭据）和 `src/server/webserver.cpp`（连接地址）。
 
 ---
 
