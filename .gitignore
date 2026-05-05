@@ -1,0 +1,5 @@
+*.o
+*.obj
+server
+server_modern
+build/
