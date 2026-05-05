@@ -331,12 +331,12 @@ private:
     int timeslot_ = 0;  // alarm 间隔 (秒)
 };
 
-int *EpollUtils::u_pipefd = nullptr;
-int EpollUtils::u_epollfd = 0;
+inline int *EpollUtils::u_pipefd = nullptr;
+inline int EpollUtils::u_epollfd = 0;
 
 // 默认超时回调: 关闭连接
 // 从 epoll 移除 fd, close, m_user_count-- 由调用方处理
-void cb_func(ClientData *user_data)
+inline void cb_func(ClientData *user_data)
 {
     epoll_ctl(EpollUtils::u_epollfd, EPOLL_CTL_DEL, user_data->sockfd, nullptr);
     assert(user_data);

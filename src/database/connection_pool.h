@@ -121,7 +121,8 @@ private:
     {
         try
         {
-            ConnPtr conn(driver_->connect(host_, user_, password_));
+            std::string url = "tcp://" + host_ + ":" + std::to_string(port_);
+            ConnPtr conn(driver_->connect(url, user_, password_));
             conn->setSchema(database_);
             return conn;
         }

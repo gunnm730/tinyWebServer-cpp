@@ -15,8 +15,8 @@
 int main(int argc, char *argv[])
 {
     // 数据库连接信息 (部署时修改)
-    std::string user = "root";
-    std::string passwd = "root";
+    std::string user = "webuser";
+    std::string passwd = "webpass";
     std::string databasename = "qgydb";
 
     // 解析命令行参数 (-p -l -m -o -s -t -c -a)

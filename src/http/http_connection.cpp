@@ -469,31 +469,35 @@ HttpConnection::HttpCode HttpConnection::do_request()
                        ? "/welcome.html"
                        : "/logError.html";
         }
+
+        // CGI 可能修改了 url_ (重定向), 重新计算 real_file_
+        slash_pos = url_.rfind('/');
+        route_flag = url_[slash_pos + 1];
+        goto reroute;
     }
-    else
+
+reroute:
+    // 静态页面路由 (也被 CGI 重定向后跳转至此)
+    switch (route_flag)
     {
-        // 静态页面路由
-        switch (route_flag)
-        {
-        case '0':
-            real_file_ = doc_root_ + "/register.html";
-            break;
-        case '1':
-            real_file_ = doc_root_ + "/log.html";
-            break;
-        case '5':
-            real_file_ = doc_root_ + "/picture.html";
-            break;
-        case '6':
-            real_file_ = doc_root_ + "/video.html";
-            break;
-        case '7':
-            real_file_ = doc_root_ + "/fans.html";
-            break;
-        default:
-            real_file_ = doc_root_ + url_;
-            break;
-        }
+    case '0':
+        real_file_ = doc_root_ + "/register.html";
+        break;
+    case '1':
+        real_file_ = doc_root_ + "/log.html";
+        break;
+    case '5':
+        real_file_ = doc_root_ + "/picture.html";
+        break;
+    case '6':
+        real_file_ = doc_root_ + "/video.html";
+        break;
+    case '7':
+        real_file_ = doc_root_ + "/fans.html";
+        break;
+    default:
+        real_file_ = doc_root_ + url_;
+        break;
     }
 
     // 文件校验

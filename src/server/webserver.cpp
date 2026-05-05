@@ -79,7 +79,7 @@ void WebServer::init_log()
 /** 初始化数据库连接池 + 加载用户数据到内存 */
 void WebServer::init_db_pool()
 {
-    ConnectionPool::instance().init("localhost", db_user_, db_passwd_, db_name_, 3306, cfg_.sql_num);
+    ConnectionPool::instance().init("127.0.0.1", db_user_, db_passwd_, db_name_, 3307, cfg_.sql_num);
     HttpConnection::load_users(ConnectionPool::instance());
 }
 
