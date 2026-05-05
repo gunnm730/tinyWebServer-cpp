@@ -1,5 +1,5 @@
 *.o
 *.obj
-server
-server_modern
+/server
+/server_modern
 build/
